@@ -12,6 +12,6 @@ if(__name__ == "__main__"):
     
     CustomArgs = collections.namedtuple('CustomArgs', ['flags', "type", "target"])
     options = [
-        CustomArgs(['--lr', '--learning_rate'], type = float, target = "optimizer;args;lr"),
-        CustomArgs(['--bs', '--batch_size'], type = int, target = "data_loader;args;batch_size"),
+        CustomArgs(flags = ['--lr', '--learning_rate'], type = float, target = "optimizer;args;lr"),
+        CustomArgs(flags = ['--bs', '--batch_size'], type = int, target = "data_loader;args;batch_size"),
     ]
