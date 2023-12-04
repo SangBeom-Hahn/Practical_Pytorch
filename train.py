@@ -2,6 +2,11 @@ import argparse
 import collections
 from config_parser import ConfigParser
 
+def main(config):
+    logger = config.get_logger("train")
+    config.init_obj("data_loader", module_data)
+    pass
+
 if(__name__ == "__main__"):
     args = argparse.ArgumentParser(description="Practical Pytorch")
     args.add_argument('-c', '--config', default=None, type=str,

@@ -82,9 +82,42 @@ class ConfigParser():
         
         return cls(config, resume, modification)
     
+    def init_obj(self, name, module, *args, **kwargs):
+        '''
+            "data_loader": { 
+                "type": "MnistDataLoader",
+                "args":{
+                    "data_dir": "data/",
+                    "batch_size": 128,
+                    "shuffle": true,
+                    "validation_split": 0.1,
+                    "num_workers": 2
+                }
+            }
+        '''
+        
+        module_name = self[name]["type"]
+        module_args = dict(self[name]["args"])
+        
+        # k가 module_args에 속하지 않는 것이 있다면 예외 발생
+        assert all([k not in module_args for k in kwargs]), "Overwriting kwargs given in config file is not allowed"
+        module_args.update(kwargs)
+        
+        # getattr로 가져온 모듈에 callable로 호출하고 인자를 넣음
+        return getattr(module, module_name)(*args, **module_args)
+        
+    
     # config 메서드로 불러온 OrderedDict를 접근함
     def __getitem__(self, name):
         return self.config[name]
+    
+    def get_logger(self, name, verbosity = 2):
+        msg_verbosity = "verbosity option {} is invalid. Valid options are {}.".format(verbosity, self.log_levels.keys())
+        assert verbosity in self.log_levels, msg_verbosity
+        logger = logging.getLogger(name)
+        logger.setLevel(self.log_levels[verbosity])
+        return logger
+        
     
 def _get_opt_name(flags):
     for flg in flags:
