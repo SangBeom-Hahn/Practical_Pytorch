@@ -1,13 +1,13 @@
 import os
 import logging
 from pathlib import Path
-from utils import read_json, get_opt_name, update_config, write_json
+from utils import read_json, write_json
 from datetime import datetime
 from logger import setup_logging
 
 class ConfigParser():
     def __init__(self, config, resume=None, modification=None, run_id=None) -> object:
-        self.__config = update_config(config, modification)
+        self.__config = _update_config(config, modification)
         self.resume = resume
         
         save_dir = Path(self.__config["trainer"]["save_dir"])
@@ -78,8 +78,26 @@ class ConfigParser():
         if(args.config and resume):
             config.update(read_json(args.config))
             
-        modification = {opt.target : getattr(args, get_opt_name(opt.flags)) for opt in options}
+        modification = {opt.target : getattr(args, _get_opt_name(opt.flags)) for opt in options}
         
         return cls(config, resume, modification)
-        
-        
+    
+    # config 메서드로 불러온 OrderedDict를 접근함
+    def __getitem__(self, name):
+        return self.config[name]
+    
+def _get_opt_name(flags):
+    for flg in flags:
+        if(flg.startswith("--")):
+            return flg.replace("--", '')
+    return flags[0].replace("--", "")
+
+def _update_config(config, modification):
+    if(modification is None):
+        return config
+    
+    # modification = {'optimizer;args;lr': None, 'data_loader;args;batch_size': None}
+    for k, v in modification.items():
+        if(v is not None):
+            pass
+    return config

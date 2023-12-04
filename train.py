@@ -1,5 +1,6 @@
 import argparse
 import collections
+from config_parser import ConfigParser
 
 if(__name__ == "__main__"):
     args = argparse.ArgumentParser(description="Practical Pytorch")
@@ -15,3 +16,7 @@ if(__name__ == "__main__"):
         CustomArgs(flags = ['--lr', '--learning_rate'], type = float, target = "optimizer;args;lr"),
         CustomArgs(flags = ['--bs', '--batch_size'], type = int, target = "data_loader;args;batch_size"),
     ]
+    
+    # config 파서 객체 만든 것을 main으로 전달
+    config = ConfigParser.from_args(args, options)
+    main(config)
