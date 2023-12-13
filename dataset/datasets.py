@@ -11,9 +11,9 @@ class IrisDataset(BaseDataset):
     """    
     
     def __init__(self, data_dir):
-        self.data = pd.read_csv(data_dir)
-        self.X = self.data.drop("target") # 넘파이 형식으로 반환
-        self.y = self.data["target"]
+        self.data = pd.read_csv(data_dir + "/iris.csv")
+        self.X = self.data.drop(["Id", "Species"], axis=1) # 넘파이 형식으로 반환
+        self.y = self.data["Species"]
         self.transform = transforms.Compose([
             transforms.ToTensor(),
             transforms.Normalize((0.1307,), (0.3081,))

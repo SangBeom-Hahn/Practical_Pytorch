@@ -110,11 +110,13 @@ class ConfigParser():
     def init_data_loader(self, name, module, *args, **kwargs):
         module_name = self[name]["type"]
         # 데이터 셋 추출
-        dataset = self.init_obj(self["dataset"]["type"], module_dataset)(self["dataset"]["args"])
+        dataset = self.init_obj("dataset", module_dataset)
         
         # 데이터 로더 생성자에 데이터 셋을 가장 먼저 넣기
         module_args = {"dataset" : dataset} 
-        module_args.update(kwargs)
+        module_args.update(self[name]['args'])
+        
+        print(module_args)
         
         return getattr(module, module_name)(*args, **module_args)
         

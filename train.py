@@ -7,7 +7,7 @@ def main(config):
     logger = config.get_logger("train")
     data_loader = config.init_data_loader("data_loader", module_data)
     
-    # 여기까지 했고 테스트 ㄱㄱ
+    print(data_loader)
     
 
 if(__name__ == "__main__"):
@@ -16,8 +16,8 @@ if(__name__ == "__main__"):
                       help="config file path (default: None)")
     args.add_argument('-r', '--resume', default=None, type=str,
                       help="path to latest checkpoint (default: None)")
-    args.add_argument('-d', '--device', default=all, type=str,
-                      help="indices of GPUs to enable (default: all)")
+    args.add_argument('-d', '--device', default=None, type=str,
+                      help="indices of GPUs to enable (default: None)")
     
     CustomArgs = collections.namedtuple('CustomArgs', ['flags', "type", "target"])
     options = [

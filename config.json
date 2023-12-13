@@ -17,7 +17,9 @@
     },
     "dataset": {
         "type": "IrisDataset",
-        "args": "data/"
+        "args":{
+            "data_dir" : "data/"
+        }
     },
     "optimizer": {
         "type": "Adam",
