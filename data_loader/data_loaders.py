@@ -1,6 +1,4 @@
 from base import BaseDataLoader
-from torchvision import transforms
-from dataset import Ir
 
 class IrisDataLoader(BaseDataLoader):
     """IrisDataLodaer
