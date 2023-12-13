@@ -107,13 +107,13 @@ class ConfigParser():
         # getattr로 가져온 모듈에 callable로 호출하고 인자를 넣음
         return getattr(module, module_name)(*args, **module_args)
     
-    def init_data_loader(self, name, module, dataset_name, *args, **kwargs):
+    def init_data_loader(self, name, module, *args, **kwargs):
         module_name = self[name]["type"]
         # 데이터 셋 추출
-        self.init_obj(dataset_name, )
+        dataset = self.init_obj(self["dataset"]["type"], module_dataset)(self["dataset"]["args"])
         
         # 데이터 로더 생성자에 데이터 셋을 가장 먼저 넣기
-        module_args = {"dataset" : module_dataset} 
+        module_args = {"dataset" : dataset} 
         module_args.update(kwargs)
         
         return getattr(module, module_name)(*args, **module_args)

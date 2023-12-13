@@ -5,8 +5,9 @@ import data_loader.data_loaders as module_data
 
 def main(config):
     logger = config.get_logger("train")
-    config.init_obj("data_loader", module_data)
+    data_loader = config.init_data_loader("data_loader", module_data)
     
+    # 여기까지 했고 테스트 ㄱㄱ
     
 
 if(__name__ == "__main__"):
