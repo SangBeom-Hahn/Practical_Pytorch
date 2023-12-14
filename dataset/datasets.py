@@ -1,7 +1,8 @@
+import os
 from base import BaseDataset
 import pandas as pd
 import torch
-from torchvision import transforms
+from torchvision import transforms, datasets
 import matplotlib.pyplot as plt
 import glob
 import numpy as np
@@ -65,3 +66,46 @@ class ImageDataset(BaseDataset):
             transforms.ToTensor(),
             transforms.Normalize((0.1307,), (0.3081,))
         ])
+        
+class ImageFolderDataset(BaseDataset):
+    # 이미지 RGB 값 평균으로 데이터 전처리
+    def __init__(self, data_dir):
+        self.transform = self._init_transforms()
+        dataset = datasets.ImageFolder(data_dir, self._init_transforms())
+
+        meanRGB = [np.mean(x.numpy(), axis=(1,2)) for x,_ in dataset]
+        stdRGB = [np.std(x.numpy(), axis=(1,2)) for x,_ in dataset]
+
+        self.meanR = np.mean([m[0] for m in meanRGB])
+        self.meanG = np.mean([m[1] for m in meanRGB])
+        self.meanB = np.mean([m[2] for m in meanRGB])
+
+        self.stdR = np.mean([s[0] for s in stdRGB])
+        self.stdG = np.mean([s[1] for s in stdRGB])
+        self.stdB = np.mean([s[2] for s in stdRGB])
+        
+        print("평균", self.meanR, self.meanG, self.meanB)
+        print("표준편차", self.stdR, self.stdG, self.stdB)
+        
+        self.train_data = datasets.ImageFolder(os.path.join(data_dir), 
+                                                self._main_transfomrs())
+        
+    def getDataset(self):
+        return self.train_data
+        
+    # 픽셀별 정규화를 위한 증강
+    def _init_transforms(self):
+        return transforms.Compose([
+            transforms.ToTensor()
+        ])
+        
+    # 메인 증강
+    def _main_transfomrs(self):
+        return transforms.Compose([
+        transforms.RandomHorizontalFlip(),  # 좌우반전 
+        transforms.RandomVerticalFlip(),  # 상하반전 
+        transforms.Resize((1024, 1024)),  # 알맞게 변경하세요 
+        transforms.ToTensor(),  # 이 과정에서 [0, 255]의 범위를 갖는 값들을 [0.0, 1.0]으로 정규화, torch.FloatTensor로 변환
+        transforms.Normalize([self.meanR, self.meanG, self.meanB], 
+                                [self.stdR, self.stdG, self.stdB])  #  정규화(normalization)
+    ])

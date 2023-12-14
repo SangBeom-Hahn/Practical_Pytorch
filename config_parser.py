@@ -5,6 +5,7 @@ from utils import read_json, write_json
 from datetime import datetime
 from logger import setup_logging
 import dataset.datasets as module_dataset
+from dataset.datasets import ImageFolderDataset
 
 class ConfigParser():
     def __init__(self, config, resume=None, modification=None, run_id=None) -> object:
@@ -44,8 +45,6 @@ class ConfigParser():
     def config(self):
         return self.__config
         
-        
-    
     '''
         options = [
             CustomArgs(flags = ['--lr', '--learning_rate'], type=float, target='optimizer;args;lr'),
@@ -112,15 +111,14 @@ class ConfigParser():
         # 데이터 셋 추출
         dataset = self.init_obj("dataset", module_dataset)
         
-        # 테스트를 위해 잠깐 넣음
-        image, label = next(iter(dataset))
-        
+        if(isinstance (dataset, ImageFolderDataset)):
+            dataset = dataset.getDataset()
+
         # 데이터 로더 생성자에 데이터 셋을 가장 먼저 넣기
         module_args = {"dataset" : dataset} 
         module_args.update(self[name]['args'])
         
         return getattr(module, module_name)(*args, **module_args)
-        
     
     # config 메서드로 불러온 OrderedDict를 접근함
     def __getitem__(self, name):
@@ -131,8 +129,7 @@ class ConfigParser():
         assert verbosity in self.log_levels, msg_verbosity
         logger = logging.getLogger(name)
         logger.setLevel(self.log_levels[verbosity])
-        return logger
-        
+        return logger   
     
 def _get_opt_name(flags):
     for flg in flags:

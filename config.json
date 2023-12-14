@@ -16,7 +16,7 @@
         }
     },
     "dataset": {
-        "type": "ImageDataset",
+        "type": "ImageFolderDataset",
         "args":{
             "data_dir" : "data/"
         }
