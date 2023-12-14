@@ -113,6 +113,9 @@ class ConfigParser():
         
         if(isinstance (dataset, ImageFolderDataset)):
             dataset = dataset.getDataset()
+            
+        img, label = dataset.__getitem__(2)
+        print(label, img.shape)
 
         # 데이터 로더 생성자에 데이터 셋을 가장 먼저 넣기
         module_args = {"dataset" : dataset} 

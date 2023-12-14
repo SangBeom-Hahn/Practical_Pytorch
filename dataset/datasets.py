@@ -4,6 +4,7 @@ import pandas as pd
 import torch
 from torchvision import transforms, datasets
 import matplotlib.pyplot as plt
+from PIL import Image
 import glob
 import numpy as np
 
@@ -39,10 +40,10 @@ class IrisDataset(BaseDataset):
 class ImageDataset(BaseDataset):
     def __init__(self, data_dir):
         # 이미지 데이터 초기화
-        self.file_path = glob.glob(data_dir + "/*.jpg")
-        self.X = np.array([plt.imread(self.file_path[idx]) for idx in range(len(self.file_path))])
+        self.image_list = glob.glob(data_dir + "/*.jpg")
+        self.data_len = len(self.image_list)
         
-        y = np.array([self.file_path[idx].split('\\')[-1].split('.')[0] for idx in range(len(self.file_path))])
+        y = np.array([self.image_list[idx].split('\\')[-1].split('.')[0] for idx in range(len(self.image_list))])
         self.y = self._convert_to_numeric(y)
         
         self.transform = self._transforms()
@@ -50,9 +51,12 @@ class ImageDataset(BaseDataset):
     def __len__(self):
         return len(self.y)
     
-    def __getitem__(self, index):        
-        X = self.X[index] / 255.
+    def __getitem__(self, index):   
+        single_image_path = self.image_list[index]
+        x_img = Image.open(single_image_path)
+        X = np.asarray(x_img) / 255.
         X = self.transform(X)
+        
         y = self.y[index]
         
         return X, torch.tensor(y, dtype=torch.long)
