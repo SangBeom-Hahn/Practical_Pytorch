@@ -1,7 +1,7 @@
 from torch.utils.data import Dataset
 
 class BaseDataset(Dataset):
-    def __init__(self):
+    def __init__(self, data_dir):
         pass
     
     def __len__(self):

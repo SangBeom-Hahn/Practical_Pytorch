@@ -16,7 +16,7 @@
         }
     },
     "dataset": {
-        "type": "IrisDataset",
+        "type": "ImageDataset",
         "args":{
             "data_dir" : "data/"
         }
