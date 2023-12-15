@@ -9,9 +9,9 @@
     "data_loader": { 
         "type": "IrisDataLoader",
         "args":{
-            "batch_size": 128,
-            "shuffle": true,
-            "validation_split": 0.1,
+            "batch_size": 3,
+            "shuffle": false,
+            "validation_split": 2,
             "num_workers": 2
         }
     },

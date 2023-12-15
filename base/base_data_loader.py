@@ -1,7 +1,7 @@
 import numpy as np
 from torch.utils.data import DataLoader
 from torch.utils.data.dataloader import default_collate
-from torch.utils.data.sampler import SubsetRandomSampler
+from torch.utils.data.sampler import SequentialSampler, RandomSampler, SubsetRandomSampler, WeightedRandomSampler, BatchSampler
 
 class BaseDataLoader(DataLoader):
     def __init__(
@@ -36,21 +36,25 @@ class BaseDataLoader(DataLoader):
         if split == 0.0:
             return None, None
 
-        idx_full = np.arange(self.n_samples)
+        idx_full = np.arange(self.n_samples) # 데이터 셋 크기 만큼 np.arange 0 ~ 데이터셋 크기 - 1
 
         np.random.seed(0)
         np.random.shuffle(idx_full)
 
         if isinstance(split, int):
+            # 0보단 크고 데이터 셋 길이보다는 작아야 한다.
             assert split > 0
             assert split < self.n_samples, "validation set size is configured to be larger than entire dataset."
             len_valid = split
         else:
-            len_valid = int(self.n_samples * split)
+            len_valid = int(self.n_samples * split) # self.n_samples = len(dataset)
 
         valid_idx = idx_full[0:len_valid]
         train_idx = np.delete(idx_full, np.arange(0, len_valid))
 
+
+        print("vi", valid_idx, "ti", train_idx, "lv", len_valid, 
+              "sp", split, "ns", self.n_samples)
         train_sampler = SubsetRandomSampler(train_idx)
         valid_sampler = SubsetRandomSampler(valid_idx)
 
@@ -59,3 +63,10 @@ class BaseDataLoader(DataLoader):
         self.n_samples = len(train_idx)
 
         return train_sampler, valid_sampler        
+    
+    def split_validation(self):
+        if self.valid_sampler is None:
+            return None
+        else:
+            return DataLoader(sampler=self.valid_sampler, **self.init_kwargs)
+        
