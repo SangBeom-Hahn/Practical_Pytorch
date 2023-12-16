@@ -7,9 +7,7 @@ def main(config):
     logger = config.get_logger("train")
     data_loader = config.init_data_loader("data_loader", module_data)
     
-    for _, y_batch in data_loader:
-        print(y_batch)
-    
+    valid_data_loader = data_loader.split_validation()
     
 
 if(__name__ == "__main__"):
