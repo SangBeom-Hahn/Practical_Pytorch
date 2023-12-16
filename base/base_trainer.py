@@ -5,7 +5,7 @@ from numpy import inf
 class BaseTrainer():
     """
     Base Trainer
-    """    
+    """
     
     def __init__(self, model, criterion, metric_ftns, optimizer, config) -> None:
         self.config = config
