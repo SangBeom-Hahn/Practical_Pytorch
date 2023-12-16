@@ -4,7 +4,9 @@
 
     "arch": {
         "type": "ResNet",
-        "args": {}
+        "args": {
+            "num_blocks": [3, 4, 6, 3]
+        }
     },
     "data_loader": { 
         "type": "IrisDataLoader",

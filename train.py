@@ -2,7 +2,7 @@ import argparse
 import collections
 from config_parser import ConfigParser
 import data_loader.data_loaders as module_data
-from model.resnet34 import model as module_arch # 이거 model.py 꺼내야 겠다.
+from model import model as module_arch # 이거 model.py 꺼내야 겠다.
 import model.loss as module_loss
 import model.metric as module_metric
 
@@ -40,7 +40,7 @@ def main(config):
             valid_data_loader=valid_data_loader,
             lr_scheduler=lr_scheduler)
     
-    trainer.train()
+    # trainer.train()
     
 
 if(__name__ == "__main__"):

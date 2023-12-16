@@ -26,7 +26,7 @@ class BaseTrainer():
             self.mnt_best = 0
         else:
             self.mnt_mode, self.mnt_metric = self.monitor.split() # "min val_loss"를 split
-            assert self.mnt_mode in ["min" "max"]
+            assert self.mnt_mode in ["min", "max"]
             
             # best 모델을 저장할 건데 mode가 최소값이면 best 값을 무한대로
             self.mnt_best = inf if self.mnt_mode == "min" else -inf 

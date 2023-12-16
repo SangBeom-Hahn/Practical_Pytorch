@@ -27,7 +27,7 @@ class Trainer(BaseTrainer):
         print_every = 1
         loss_val_sum = 0
         for batch_in, batch_out in self.data_loader:
-            y_pred = self.model.forward(batch_in.view(-1, 512 * 384).to(self.device))
+            y_pred = self.model.forward(batch_in.float().to(self.device))
             loss_out = self.criterion(y_pred, batch_out.to(self.device))
             
             self.optimizer.zero_grad()

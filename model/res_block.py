@@ -1,5 +1,4 @@
 import torch.nn as nn
-from conv_block import ConvBlock
 import torch.nn.functional as F
 
 class BasicBlock(nn.Module):
