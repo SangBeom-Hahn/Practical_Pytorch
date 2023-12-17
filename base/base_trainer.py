@@ -35,10 +35,10 @@ class BaseTrainer():
                 self.early_stop = inf
                 
         self.start_epoch = 1
-        # 이게 config parser에 있음
+        # dir이 config parser에 있음
         self.checkpoint_dir = config.save_dir
         
-        # 이게 config parser에 있음
+        # resume config parser에 있음
         if(config.resume is not None):
             self._resume_checkpoint(config.resume) # 현재는 resume None
             

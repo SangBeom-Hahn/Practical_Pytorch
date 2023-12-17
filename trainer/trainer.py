@@ -19,9 +19,7 @@ class Trainer(BaseTrainer):
 
         Args:
             epoch (_type_): training epoch
-        """        
-        # 하는 중(ML basic 따라치기 2 참고해서 파탬 코드에 따라치기 코드가 돌아가도록 만들어라)
-        # 그리고 필요한 걸 탬플릿에서 채워나가는 거로 하자
+        """
         
         self.model.train() # 학습 모드
         print_every = 1

@@ -2,8 +2,6 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 class BasicBlock(nn.Module):
-	# mul은 추후 ResNet18, 34, 50, 101, 152등 구조 생성에 사용됨
-    mul = 1
     def __init__(self, in_planes, out_planes, stride=1):
         super(BasicBlock, self).__init__()
         

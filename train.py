@@ -19,7 +19,7 @@ def main(config):
     model = config.init_obj("arch", module_arch)
     logger.info(model) # info니깐 log 파일에 남음
     
-    # config에 적힌 gpu 개수만큼 학습을 진행한다. 
+    # config에 적힌 gpu 개수만큼 학습을 진행한다.
     # 하지만 가용 가능한 GPU 개수가 적거나 없으면 CPU로 할 수도 있다.
     device, device_ids = prepare_device(config["n_gpu"]) 
     if(len(device_ids) > 1):
@@ -28,9 +28,11 @@ def main(config):
     criterion = getattr(module_loss, config["loss"])
     metrics = [getattr(module_metric, metric) for metric in config["metrics"]]
     
-    # optm = optim.Adam(M.parameters(),lr=1e-3)
+    # optm = optim.Adam(M.parameters(), lr=1e-3)
     trainable_params = filter(lambda p: p.requires_grad, model.parameters())
-    optimizer = config.init_obj("optimizer", torch.optim, trainable_params) # optim에는 원래 파라미터가 들어가는데 학습 가능한 것만 넣기
+    
+    # optim에는 원래 파라미터가 들어가는데 학습 가능한 것만 넣기
+    optimizer = config.init_obj("optimizer", torch.optim, trainable_params)
     lr_scheduler = config.init_obj('lr_scheduler', torch.optim.lr_scheduler, optimizer)
     
     trainer = Trainer(model, criterion, metrics, optimizer,
