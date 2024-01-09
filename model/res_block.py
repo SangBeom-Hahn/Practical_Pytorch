@@ -2,6 +2,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 class BasicBlock(nn.Module):
+    mul = 1
     def __init__(self, in_planes, out_planes, stride=1):
         super(BasicBlock, self).__init__()
         

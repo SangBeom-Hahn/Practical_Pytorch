@@ -52,9 +52,6 @@ class BaseDataLoader(DataLoader):
         valid_idx = idx_full[0:len_valid]
         train_idx = np.delete(idx_full, np.arange(0, len_valid))
 
-
-        print("vi", valid_idx, "ti", train_idx, "lv", len_valid, 
-              "sp", split, "ns", self.n_samples)
         train_sampler = SubsetRandomSampler(train_idx)
         valid_sampler = SubsetRandomSampler(valid_idx)
 

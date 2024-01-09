@@ -10,20 +10,21 @@ class ResNet(nn.Module):
         super().__init__()
         #RGB 3개 채널에서 64개의 Kernel 사용 (논문 참고)
         self.in_planes = 64
+        self.block = BasicBlock
         
         # Resnet 논문 구조의 conv1 파트 그대로 구현
         self.conv1 = nn.Conv2d(3, self.in_planes, kernel_size=7, stride=2, padding = 3)
         self.bn1 = nn.BatchNorm2d(self.in_planes)
         self.maxpool1 = nn.MaxPool2d(kernel_size=3, stride=2, padding=1)
         
-        self.layer1 = self.make_layer(BasicBlock, 64, num_blocks[0], stride=1)
-        self.layer2 = self.make_layer(BasicBlock, 128, num_blocks[1], stride=2)
-        self.layer3 = self.make_layer(BasicBlock, 256, num_blocks[2], stride=2)
-        self.layer4 = self.make_layer(BasicBlock, 512, num_blocks[3], stride=2)
+        self.layer1 = self.make_layer(self.block, 64, num_blocks[0], stride=1)
+        self.layer2 = self.make_layer(self.block, 128, num_blocks[1], stride=2)
+        self.layer3 = self.make_layer(self.block, 256, num_blocks[2], stride=2)
+        self.layer4 = self.make_layer(self.block, 512, num_blocks[3], stride=2)
         self.avgpool = nn.AdaptiveAvgPool2d((1,1))
         
         # Basic Resiudal Block일 경우 그대로, BottleNeck일 경우 4를 곱한다.
-        self.linear = nn.Linear(512 * BasicBlock, num_classes)
+        self.linear = nn.Linear(512 * self.block.mul, num_classes)
         
     # 다양한 Architecture 생성을 위해 make_layer로 Sequential 생성     
     def make_layer(self, block, out_planes, num_blocks, stride):
@@ -32,7 +33,7 @@ class ResNet(nn.Module):
         layers = []
         for i in range(num_blocks):
             layers.append(block(self.in_planes, out_planes, strides[i]))
-            self.in_planes = block * out_planes
+            self.in_planes = block.mul * out_planes
         return nn.Sequential(*layers)
     
     def forward(self, x):

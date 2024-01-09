@@ -54,11 +54,10 @@ class BaseTrainer():
     def train(self):
         """Train logic
         """        
-        
-        not_improved_cout = 0
         for epoch in range(self.start_epoch, self.epochs + 1):
-            result = self._train_epoch(epoch)
+            self._train_epoch(epoch)
             # 하는 중
+        print ("Done")
             
     def _resume_checkpoint(self, resume_path):
         """
