@@ -18,6 +18,9 @@ def main(config):
     valid_data_loader = data_loader.split_validation()
     
     model = config.init_obj("arch", module_arch)
+    for param in model.parameters():
+        param.requires_grad == True
+
     logger.info(model) # info니깐 log 파일에 남음
     
     # config에 적힌 gpu 개수만큼 학습을 진행한다.

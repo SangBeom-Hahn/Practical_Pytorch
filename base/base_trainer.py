@@ -1,6 +1,7 @@
 import torch
 from abc import abstractclassmethod
 from numpy import inf
+import numpy as np
 
 class BaseTrainer():
     """
@@ -19,20 +20,10 @@ class BaseTrainer():
         cfg_trainer = config["trainer"] # config.json에 있는 파라미터 선언
         self.epochs = cfg_trainer["epochs"]
         self.save_period = cfg_trainer["save_period"]
-        self.monitor = cfg_trainer.get("monitor", "off") # 기본 값 off
         
-        if(self.monitor == "off"):
-            self.mnt_mode = "off"
-            self.mnt_best = 0
-        else:
-            self.mnt_mode, self.mnt_metric = self.monitor.split() # "min val_loss"를 split
-            assert self.mnt_mode in ["min", "max"]
-            
-            # best 모델을 저장할 건데 mode가 최소값이면 best 값을 무한대로
-            self.mnt_best = inf if self.mnt_mode == "min" else -inf 
-            self.early_stop = cfg_trainer.get("early_stop", inf)
-            if(self.early_stop <= 0):
-                self.early_stop = inf
+        self.best_val_acc = 0
+        self.best_val_loss = np.inf
+        self.iteration_change_loss = 0
                 
         self.start_epoch = 1
         # dir이 config parser에 있음

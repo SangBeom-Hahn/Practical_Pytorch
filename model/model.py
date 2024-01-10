@@ -5,8 +5,7 @@ import torch
 from .res_block import BasicBlock
 
 class ResNet(nn.Module):
-	# CIFAR-10을 학습시킬 것이므로, num_classes=10으로 설정
-    def __init__(self, num_blocks, num_classes=10):
+    def __init__(self, num_blocks, num_classes=7):
         super().__init__()
         #RGB 3개 채널에서 64개의 Kernel 사용 (논문 참고)
         self.in_planes = 64
