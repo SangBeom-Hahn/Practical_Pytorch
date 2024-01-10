@@ -13,8 +13,9 @@ class Trainer(BaseTrainer):
         self.data_loader = data_loader
         self.device = device
         self.valid_data_loader = valid_data_loader
+        self.lr_scheduler = lr_scheduler
     
-    def _train_epoch(self, epoch):
+    def _train_epoch(self, epoch, EPOCHS):
         """Training logic for an epoch
 
         Args:
@@ -37,12 +38,14 @@ class Trainer(BaseTrainer):
         
         # Print
         if ((epoch%print_every)==0) or (epoch==(EPOCHS-1)):
-            print(1)
             train_accr = self._func_eval(self.model, self.data_loader, self.device)
             test_accr = self._func_eval(self.model, self.valid_data_loader, self.device)
             
             print ("epoch:[%d] loss:[%.3f] train_accr:[%.3f] test_accr:[%.3f]."%
                 (epoch, loss_val_avg, train_accr, test_accr))
+            
+        if(self.lr_scheduler is not None):
+            self.lr_scheduler.step()
             
     def _func_eval(self, model, data_loader, device):
         with torch.no_grad():
