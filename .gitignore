@@ -3,3 +3,4 @@ data/
 input/
 saved/
 datasets/
+wandb/

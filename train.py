@@ -9,6 +9,7 @@ import model.metric as module_metric
 from utils import prepare_device
 import torch
 from trainer import Trainer
+import wandb
 
 def main(config):
     logger = config.get_logger("train")
@@ -42,6 +43,8 @@ def main(config):
             valid_data_loader=valid_data_loader,
             lr_scheduler=lr_scheduler)
     
+    # 지정 위치가 중요, 최초 한 번 일어나는 곳이 좋음(__main__)
+    wandb.init(project="practical-pytorch", config={})
     trainer.train()
     
 

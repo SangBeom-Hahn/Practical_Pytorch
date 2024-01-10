@@ -1,5 +1,6 @@
 from base import BaseTrainer
 import torch
+import wandb
 
 class Trainer(BaseTrainer):
     """Trainer class
@@ -21,7 +22,6 @@ class Trainer(BaseTrainer):
         Args:
             epoch (_type_): training epoch
         """
-        
         self.model.train() # 학습 모드
         print_every = 1
         loss_val_sum = 0
@@ -39,10 +39,14 @@ class Trainer(BaseTrainer):
         # Print
         if ((epoch%print_every)==0) or (epoch==(EPOCHS-1)):
             train_accr = self._func_eval(self.model, self.data_loader, self.device)
-            test_accr = self._func_eval(self.model, self.valid_data_loader, self.device)
+            val_accr = self._func_eval(self.model, self.valid_data_loader, self.device)
             
             print ("epoch:[%d] loss:[%.3f] train_accr:[%.3f] test_accr:[%.3f]."%
-                (epoch, loss_val_avg, train_accr, test_accr))
+                (epoch, loss_val_avg, train_accr, val_accr))
+            wandb.log({
+                "train_accr" : train_accr,
+                "val_accr" : val_accr
+            }, step = epoch)
             
         if(self.lr_scheduler is not None):
             self.lr_scheduler.step()

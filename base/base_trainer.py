@@ -53,7 +53,7 @@ class BaseTrainer():
     
     def train(self):
         """Train logic
-        """        
+        """
         for epoch in range(self.start_epoch, self.epochs + 1):
             self._train_epoch(epoch, self.epochs)
             # 하는 중
