@@ -48,7 +48,11 @@ class BaseTrainer():
         for epoch in range(self.start_epoch, self.epochs + 1):
             self._train_epoch(epoch, self.epochs)
             # 하는 중
+            if self.iteration_change_loss == 10: # args.patience
+                print(f'Early stopping after {self.iteration_change_loss} iterations without the increase of the val loss.')
+                break
         print ("Done")
+        
             
     def _resume_checkpoint(self, resume_path):
         """
