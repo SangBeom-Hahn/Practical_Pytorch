@@ -1,9 +1,9 @@
 # Practical_Pytorch
-실전 Pytorch 구축 공간
+실전 Pytorch 모델 학습 환경 구축
 
 ## Introduction
 
-본 프로젝트는 pytorch 프레임워크를 활용하여 데이터셋, 데이터 로더, 트레이너, 모델을 적재적소로 커스터마이징할 수 있도록 합니다. AI 연구자 및 엔지니어는 원하는 모듈을 구현하고 config를 수정하면 클라이언트 코드 변경 없이 기능을 추가할 수 있는 OCP 원칙을 달성할 수 있습니다.
+본 프로젝트는 pytorch 프레임워크를 활용하여 데이터셋, 데이터 로더, 트레이너, AI 모델을 적재적소로 커스터마이징할 수 있도록 합니다. AI 연구자 및 엔지니어는 원하는 모듈을 구현하고 config를 수정하면 클라이언트 코드 변경 없이 기능을 추가할 수 있는 OCP 원칙을 달성할 수 있습니다.
 
 ## Project Structure
 
@@ -24,10 +24,10 @@ Practical_Pytorch
 └── requirements.txt
 ```
 
-- base : 데이터셋, 데이터 로더, 트레이너, 모델 상위 super 클래스
+- base : 데이터셋, 데이터 로더, 트레이너, AI 모델 super 클래스
 - data_loader : 사용할 커스텀 데이터 로더
 - dataset : 커스텀 데이터 셋
-- model : 커스텀 모델
+- model : 커스텀 AI 모델
 - trainer : 커스텀 트레이너
 - logger : 로깅
 - utils : json 파싱, GPU 유틸리티
@@ -38,7 +38,7 @@ Practical_Pytorch
 - kfold_train : kfold 학습 코드
 
 ## Features
-- config.json으로 편리하게 매개변수 변경
+- config.json으로 편리하게 학습 컴포넌트 및 매개변수 변경
 - base 추상 클래스 사용
 - 명확한 폴더 구조로 협업 시 충돌 문제 제거
 
@@ -103,7 +103,7 @@ Practical_Pytorch
 ```
 
 - 모델 학습 : ```python train.py -c config.json```
-- 인퍼런스 : ```python train.py --resume path/to/checkpoint```
+- 인퍼런스 : ```python test.py --resume path/to/checkpoint```
   - 모델 학습 결과 results dir에 pth 가중치 파일이 저장됩니다.
 
 ## Customization
@@ -118,7 +118,9 @@ config.json을 파싱하고 편리하게 사용할 수 있는 모듈입니다. �
 
 ### Data Loader
 1. ```BaseDataLoader``` 상속
-BaseDataLoader.split_validation()으로 훈련, 검증 셋을 나눠서 데이터 로더를 사용할 수 있습니다.
+
+    BaseDataLoader.split_validation()으로 훈련, 검증 셋을 나눠, 데이터 로더를 생성할 수 있습니다.
+
 
 2. 사용법
 ```python
@@ -129,7 +131,8 @@ for batch_idx, (x_batch, y_batch) in data_loader:
 ```
 
 3. 커스터 마이징
-```data_loader/data_loaders```에 원하는 데이터 로더를 구현하고 configparser로 주입받아 사용할 수 있습니다.
+
+    ```data_loader/data_loaders```에 원하는 데이터 로더를 구현하고 configparser로 주입받아 사용할 수 있습니다.
 
 ### Dataset
 1. ```BaseDataset``` 상속
@@ -140,7 +143,7 @@ def init_data_loader(self, name, module, *args, **kwargs):
         # 데이터 셋 추출
         dataset = self.init_obj("dataset", module_dataset)
 ```
-config parser의 데이터 로더 생성 메서드 내부에서 데이터 셋을 생성하고 인자로 주어 원하는 데이터 셋, 로더 쌍을 사용하도록 하였으며, config.json으로 선택할 수 있습니다.
+config parser의 데이터 로더 생성 메서드 내부에서 데이터 셋을 생성하고 인자로 주어 원하는 데이터 셋, 로더 쌍을 사용하도록 하였으며, config.json으로 원하는 데이터 셋과 로더를 선택할 수 있습니다.
 
 ### Trainer
 1. ```BaseTrainer``` 상속
@@ -158,7 +161,8 @@ BaseTrainer의 train 메서드가 커스텀 Trainer의 _train_epoch를 호출합
 
 ### Model
 1. 사용법
-```model/```에 커스텀 모델을 만들고
+
+    ```model/```에 커스텀 모델을 만들고
 
 ```
 "arch": {
@@ -172,13 +176,14 @@ config.json으로 주입받아서 사용할 수 있습니다.
 
 ### Logging
 1. Setup Logger
-```logger/logger```의 setup_logging 메서드에서 python logging을 셋팅합니다.
-```logger_config.json```에 setting 데이터가있습니다.
+
+    ```logger/logger```의 setup_logging 메서드에서 python logging을 셋팅합니다.
+    ```logger_config.json```에 setting 데이터가 있습니다.
 
 ```python
 logging.config.dictConfig(config)
 ```
-dictConfig로 세세한 로거 셋팅을 할 수 있습니다.
+  dictConfig로 세세한 로거 셋팅을 할 수 있습니다.
 
 2. 사용법
 ```python
