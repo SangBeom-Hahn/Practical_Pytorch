@@ -1,6 +1,10 @@
 # Practical_Pytorch
 실전 Pytorch 모델 학습 환경 구축
 
+[NAVER Boostcamp Pull Request](https://github.com/boostcampaitech6/level2-objectdetection-cv-05/pull/14)
+
+<br>
+
 ## Introduction
 
 본 프로젝트는 pytorch 프레임워크를 활용하여 데이터셋, 데이터 로더, 트레이너, AI 모델을 적재적소로 커스터마이징할 수 있도록 합니다. AI 연구자 및 엔지니어는 원하는 모듈을 구현하고 config를 수정하면 클라이언트 코드 변경 없이 기능을 추가할 수 있는 OCP 원칙을 달성할 수 있습니다.
